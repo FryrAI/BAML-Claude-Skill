@@ -24,19 +24,15 @@ This Claude Code skill generates complete, compilable BAML code by querying offi
 
 #### Via Plugin Marketplace (Recommended)
 
-1. **Add this repository as a plugin marketplace:**
-   ```
-   /plugin marketplace add FryrAI/BAML-Claude-Skill
-   ```
+Install directly from the Claude Code plugin marketplace:
 
-2. **Install the BAML code generation skill:**
-   ```
-   /plugin install baml-codegen@baml-skills
-   ```
+```
+/plugin install baml-codegen@baml-skills
+```
 
 #### Manual Installation
 
-Clone this repository into your Claude Code skills directory:
+Alternatively, clone this repository into your Claude Code skills directory:
 
 ```bash
 # Project-level (recommended)
