@@ -157,6 +157,22 @@ Every generation includes:
 - Multi-agent systems
 - State management
 
+## GitHub Actions Integration
+
+This repository includes Claude Code GitHub Actions for AI-powered automation:
+
+- **AI Code Review**: Automated PR analysis
+- **Issue Resolution**: Generate fixes from issue descriptions
+- **Feature Implementation**: Create code from natural language requirements
+
+### Quick Setup
+
+1. Install [Claude GitHub App](https://github.com/apps/claude-code)
+2. Add `ANTHROPIC_API_KEY` to repository secrets
+3. Comment `/claude <request>` on any issue or PR
+
+See [docs/GITHUB_ACTIONS_SETUP.md](docs/GITHUB_ACTIONS_SETUP.md) for detailed setup instructions.
+
 ## Supported Languages & Frameworks
 
 ### Python
@@ -224,11 +240,12 @@ If MCP servers are unavailable, the skill operates in offline mode:
 
 ## Documentation
 
-- **[Skill Definition](baml-codegen/SKILL.md)**: Complete skill instructions (3800 tokens)
-- **[Implementation Guide](IMPLEMENTATION_COMPLETE.md)**: Technical details
+- **[Skill Definition](baml-codegen/SKILL.md)**: Complete skill instructions
+- **[Implementation Guide](docs/development/IMPLEMENTATION_COMPLETE.md)**: Technical details
 - **[Troubleshooting](baml-codegen/TROUBLESHOOTING.md)**: Common issues and solutions
 - **[Specifications](specs/)**: Detailed design documents
 - **[Templates](baml-codegen/templates/)**: Example patterns
+- **[Release Notes](docs/archive/)**: Version history and test results
 
 ## Development
 
@@ -237,22 +254,26 @@ If MCP servers are unavailable, the skill operates in offline mode:
 ```
 BAML-Claude-Skill/
 ├── .claude-plugin/
-│   └── marketplace.json         # Plugin metadata
+│   └── marketplace.json         # Plugin marketplace schema
 ├── baml-codegen/                # Main skill directory
 │   ├── SKILL.md                 # Skill definition (Claude reads this)
 │   ├── LICENSE.txt              # Skill license
-│   ├── lib/                     # Reference modules (18 files)
+│   ├── lib/                     # Reference modules
 │   │   ├── mcp_interface.md     # MCP query patterns
 │   │   ├── code_generator.md    # Code synthesis
 │   │   ├── validator.md         # 5-layer validation
-│   │   └── ...                  # 15 more modules
+│   │   └── ...                  # Additional modules
 │   ├── templates/               # Example patterns
 │   │   ├── extraction/          # Invoice, resume, receipt
 │   │   ├── classification/      # Sentiment, intent
 │   │   ├── rag/                 # Citation, search
 │   │   └── agents/              # Planning, execution
 │   └── cache/                   # Pattern cache structure
-└── specs/                       # Design documents
+├── docs/                        # Documentation
+│   ├── archive/                 # Release notes and test results
+│   ├── development/             # Implementation and development docs
+│   └── GITHUB_ACTIONS_SETUP.md  # GitHub Actions setup guide
+└── specs/                       # Design specifications
 ```
 
 ### Contributing
@@ -324,6 +345,6 @@ Uses [BAML](https://github.com/BoundaryML/baml) by BoundaryML
 
 ---
 
-**Status**: ✅ Production Ready | **Version**: 1.0.0
+**Status**: ✅ Production Ready | **Version**: 1.2.0
 
 Ready to generate production BAML code in seconds!
