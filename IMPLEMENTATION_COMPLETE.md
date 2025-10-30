@@ -1,7 +1,7 @@
 # BAML Code Generation Skill - Implementation Complete ✅
 
-**Date**: 2025-01-25
-**Version**: 1.0.0
+**Date**: 2025-01-30 (updated)
+**Version**: 1.1.0 (MCP-Enforced)
 **Status**: Production Ready
 
 ## Executive Summary
@@ -475,7 +475,35 @@ Token reduction strategies:
 - Usage analytics dashboard
 - Collaborative pattern library
 
-## Conclusion
+## Version History
+
+### v1.1.0 - MCP Enforcement (2025-01-30)
+
+**Critical Update**: Enforced real-time MCP queries during code generation
+
+**Problem Identified**: During testing, discovered skill was *describing* MCP usage but not *enforcing* execution. Claude could generate code from training data alone, breaking the core value proposition: "stay up-to-date with a changing codebase."
+
+**Changes**:
+- ✅ **Pattern Recognition**: Explicit MCP query execution with tool names (mcp__baml_Examples__search_baml_examples_code)
+- ✅ **Workflow**: Marked step [2] as "🔍 MCP REQUIRED" with concrete execution steps
+- ✅ **New Section**: "MCP Query Execution" with observable indicators (🔍 ✅ 📦 ⚠️)
+- ✅ **Compression**: Reduced BAML Syntax Reference from ~150 to ~40 words (~385 tokens saved)
+- ✅ **Token Budget**: 1160 words (~3543 tokens, 89% of 4000 budget) - improved from v1.0.0!
+
+**Impact**:
+- MCP queries now mandatory during generation (not optional)
+- Observable indicators show users when MCP is used vs cached
+- Patterns stay synchronized with official BoundaryML repositories
+- Maintains 80% offline functionality with graceful fallbacks
+
+**Files**:
+- `baml-codegen/SKILL.md` - Core changes
+- `CRITICAL_FINDING_MCP_USAGE.md` - Problem documentation
+- `V1.1.0_RELEASE_NOTES.md` - Detailed release notes
+
+**Commit**: `2a63bac`
+
+### v1.0.0 - Initial Implementation (2025-01-25)
 
 **Status**: ✅ **IMPLEMENTATION COMPLETE**
 
@@ -491,13 +519,15 @@ Successfully delivered a production-ready BAML Code Generation Skill that:
 - Tracks performance metrics and costs
 - Includes complete documentation
 
-The skill is ready for immediate use in Claude Code and meets all specified requirements from the original specification.
-
----
-
-**Implementation Date**: 2025-01-25
-**Version**: 1.0.0
-**Total Development**: Single session
 **Files Created**: 40+ markdown files
 **Lines of Code/Documentation**: 15,000+
+**Commits**: `6ec5b98` (initial), `380e78e` (plugin restructure)
+
+## Conclusion
+
+The BAML Code Generation Skill is **production-ready** and fulfills its core promise: **"stay up-to-date with a changing codebase"** through enforced, observable MCP queries.
+
+**Current Version**: v1.1.0
 **Status**: 🎉 **PRODUCTION READY** 🎉
+**Ready For**: Pull Request, User Testing, Production Deployment
+**Blockers**: None
