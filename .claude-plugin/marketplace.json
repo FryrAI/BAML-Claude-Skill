@@ -1,0 +1,22 @@
+{
+  "name": "baml-skills",
+  "description": "Production-ready BAML code generation skills for Claude Code",
+  "author": "FryrAI",
+  "repository": "https://github.com/FryrAI/BAML-Claude-Skill",
+  "skills": ["baml-codegen"],
+  "version": "1.0.0",
+  "license": "MIT",
+  "homepage": "https://github.com/FryrAI/BAML-Claude-Skill",
+  "documentation": "https://github.com/FryrAI/BAML-Claude-Skill#readme",
+  "keywords": [
+    "baml",
+    "code-generation",
+    "llm",
+    "structured-output",
+    "extraction",
+    "classification",
+    "rag",
+    "agents",
+    "multimodal"
+  ]
+}

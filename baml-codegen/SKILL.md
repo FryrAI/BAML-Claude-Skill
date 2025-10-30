@@ -1,3 +1,8 @@
+---
+name: baml-codegen
+description: "Generates production-ready BAML applications from natural language requirements. Creates complete type definitions, functions, clients, tests, and framework integrations for data extraction, classification, RAG, and agent workflows. Queries official BoundaryML repositories via MCP for real-time patterns. Supports multimodal inputs (images, audio), 6 programming languages (Python, TypeScript, Ruby, Java, Go, C#), 10+ frameworks, 50-70% token optimization, and 95%+ compilation success."
+---
+
 # BAML Code Generation Skill
 
 **Version**: 1.0.0

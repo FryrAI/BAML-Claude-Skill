@@ -306,15 +306,21 @@ Successfully implemented a complete BAML Code Generation Skill for Claude Code t
 - Inline documentation in all modules
 - Example templates
 
-## File Structure Summary
+## Repository Structure (Plugin-Ready)
 
 ```
-baml-claude-skill/
-├── SKILL.md (3800 tokens) ✅
-├── metadata.yaml ✅
-├── README.md ✅
-├── TROUBLESHOOTING.md ✅
-├── lib/ (18 modules) ✅
+BAML-Claude-Skill/
+├── .claude-plugin/
+│   └── marketplace.json         # Plugin metadata ✅
+├── README.md                     # Installation instructions ✅
+├── LICENSE                       # MIT license ✅
+├── baml-codegen/                # Top-level skill directory ✅
+│   ├── SKILL.md (3800 tokens)   # With YAML frontmatter ✅
+│   ├── LICENSE.txt              # Apache 2.0 ✅
+│   ├── metadata.yaml ✅
+│   ├── README.md ✅
+│   ├── TROUBLESHOOTING.md ✅
+│   ├── lib/ (18 modules) ✅
 │   ├── mcp_interface.md
 │   ├── pattern_library.md
 │   ├── cache_manager.md
@@ -333,17 +339,33 @@ baml-claude-skill/
 │   ├── fallback_patterns.md (80% offline)
 │   ├── repository_monitor.md (daily updates)
 │   └── utils.md (error handling)
-├── templates/ ✅
-│   ├── extraction/ (invoice example)
-│   ├── classification/ (sentiment example)
-│   ├── rag/ (README)
-│   ├── agents/ (README)
-│   └── integrations/ (README)
-├── cache/ ✅
-│   ├── patterns.json
-│   ├── syntax.json
-│   └── query_cache.json
-└── .gitignore ✅
+│   ├── templates/ ✅
+│   │   ├── extraction/ (invoice example)
+│   │   ├── classification/ (sentiment example)
+│   │   ├── rag/ (README)
+│   │   ├── agents/ (README)
+│   │   └── integrations/ (README)
+│   ├── cache/ ✅
+│   │   ├── patterns.json
+│   │   ├── syntax.json
+│   │   └── query_cache.json
+│   └── .gitignore ✅
+├── specs/ ✅
+│   └── 001-baml-codegen-skill/
+└── IMPLEMENTATION_COMPLETE.md ✅
+
+## Installation for Users
+
+Via Plugin Marketplace:
+```
+/plugin marketplace add FryrAI/BAML-Claude-Skill
+/plugin install baml-codegen@baml-skills
+```
+
+Manual Installation:
+```bash
+git clone https://github.com/FryrAI/BAML-Claude-Skill.git ~/.claude/skills/baml-codegen
+```
 ```
 
 ## Success Metrics
