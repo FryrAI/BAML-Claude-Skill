@@ -1,0 +1,468 @@
+# Code Generation API Specification
+# Version: 1.0.0
+# Description: Defines the interface for BAML code generation operations
+
+openapi: 3.0.0
+info:
+  title: BAML Code Generation API
+  version: 1.0.0
+  description: Interface for generating production-ready BAML applications
+
+paths:
+  /generate:
+    post:
+      summary: Generate complete BAML application
+      operationId: generateBAMLCode
+      tags:
+        - Generation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerationRequest'
+      responses:
+        '200':
+          description: Successfully generated BAML code
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerationResponse'
+        '400':
+          description: Invalid requirements
+        '503':
+          description: MCP servers unavailable
+
+  /analyze:
+    post:
+      summary: Analyze requirements and identify patterns
+      operationId: analyzeRequirements
+      tags:
+        - Analysis
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - requirements
+              properties:
+                requirements:
+                  type: string
+                  description: Natural language requirements
+      responses:
+        '200':
+          description: Analysis complete
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalysisResponse'
+
+  /optimize:
+    post:
+      summary: Optimize existing BAML code
+      operationId: optimizeBAMLCode
+      tags:
+        - Optimization
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - code
+              properties:
+                code:
+                  type: string
+                  description: BAML code to optimize
+                optimization_level:
+                  type: string
+                  enum: [standard, aggressive]
+                  default: standard
+      responses:
+        '200':
+          description: Optimization complete
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OptimizationResponse'
+
+  /validate:
+    post:
+      summary: Validate generated BAML code
+      operationId: validateBAMLCode
+      tags:
+        - Validation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - code
+              properties:
+                code:
+                  type: string
+                  description: BAML code to validate
+      responses:
+        '200':
+          description: Validation complete
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationResponse'
+
+components:
+  schemas:
+    GenerationRequest:
+      type: object
+      required:
+        - requirements
+      properties:
+        requirements:
+          type: string
+          description: Natural language description of what to build
+          example: "Create a BAML function to extract invoice data including line items and totals"
+        target_language:
+          type: string
+          enum: [python, typescript, ruby]
+          default: python
+          description: Target language for integration code
+        optimization_level:
+          type: string
+          enum: [standard, aggressive]
+          default: standard
+          description: Level of optimization to apply
+        include_tests:
+          type: boolean
+          default: true
+          description: Whether to generate test suite
+        include_integration:
+          type: boolean
+          default: true
+          description: Whether to generate integration code
+        framework:
+          type: string
+          enum: [fastapi, flask, django, nextjs, express, nestjs, rails, sinatra]
+          description: Target framework for integration
+        multimodal:
+          type: boolean
+          default: false
+          description: Whether to support image/audio inputs
+
+    GenerationResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        generation_id:
+          type: string
+          format: uuid
+        artifacts:
+          type: object
+          properties:
+            baml_code:
+              type: string
+              description: Generated BAML code
+            tests:
+              type: array
+              items:
+                $ref: '#/components/schemas/TestFile'
+            integration:
+              $ref: '#/components/schemas/IntegrationCode'
+            deployment:
+              $ref: '#/components/schemas/DeploymentConfig'
+        metadata:
+          type: object
+          properties:
+            pattern_used:
+              type: string
+              description: Pattern category matched
+              enum: [extraction, classification, rag, agents]
+            examples_referenced:
+              type: array
+              items:
+                type: string
+                description: Repository examples used
+            generation_time_ms:
+              type: integer
+            token_usage:
+              type: object
+              properties:
+                prompt_tokens:
+                  type: integer
+                completion_tokens:
+                  type: integer
+                total_tokens:
+                  type: integer
+            optimization_metrics:
+              type: object
+              properties:
+                token_reduction:
+                  type: number
+                  description: Percentage reduction vs baseline
+                latency_improvement:
+                  type: number
+                  description: Estimated latency improvement
+            quality_score:
+              type: number
+              minimum: 0
+              maximum: 100
+
+    TestFile:
+      type: object
+      properties:
+        filename:
+          type: string
+          example: "test_extraction.py"
+        content:
+          type: string
+          description: Test file content
+        type:
+          type: string
+          enum: [unit, integration, e2e]
+        coverage:
+          type: object
+          properties:
+            happy_path:
+              type: boolean
+            edge_cases:
+              type: array
+              items:
+                type: string
+            error_cases:
+              type: array
+              items:
+                type: string
+
+    IntegrationCode:
+      type: object
+      properties:
+        language:
+          type: string
+          enum: [python, typescript, ruby]
+        framework:
+          type: string
+        files:
+          type: array
+          items:
+            type: object
+            properties:
+              path:
+                type: string
+              content:
+                type: string
+              type:
+                type: string
+                enum: [endpoint, service, model, config]
+        dependencies:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              version:
+                type: string
+        setup_instructions:
+          type: string
+
+    DeploymentConfig:
+      type: object
+      properties:
+        docker:
+          type: object
+          properties:
+            dockerfile:
+              type: string
+            compose:
+              type: string
+        kubernetes:
+          type: object
+          properties:
+            deployment:
+              type: string
+            service:
+              type: string
+            configmap:
+              type: string
+        serverless:
+          type: object
+          properties:
+            provider:
+              type: string
+              enum: [aws, gcp, azure]
+            config:
+              type: string
+        environment_variables:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              description:
+                type: string
+              required:
+                type: boolean
+              example:
+                type: string
+
+    AnalysisResponse:
+      type: object
+      properties:
+        pattern_type:
+          type: string
+          enum: [extraction, classification, rag, agents, hybrid]
+        confidence:
+          type: number
+          minimum: 0
+          maximum: 1
+        identified_entities:
+          type: array
+          items:
+            type: string
+        suggested_functions:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              purpose:
+                type: string
+              complexity:
+                type: string
+                enum: [simple, medium, complex]
+        similar_examples:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              repository:
+                type: string
+              similarity_score:
+                type: number
+        recommended_approach:
+          type: string
+
+    OptimizationResponse:
+      type: object
+      properties:
+        optimized_code:
+          type: string
+        changes_made:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                enum: [token_reduction, prompt_optimization, type_simplification, caching]
+              description:
+                type: string
+              impact:
+                type: string
+        metrics:
+          type: object
+          properties:
+            original_tokens:
+              type: integer
+            optimized_tokens:
+              type: integer
+            reduction_percentage:
+              type: number
+            estimated_cost_savings:
+              type: number
+
+    ValidationResponse:
+      type: object
+      properties:
+        valid:
+          type: boolean
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                enum: [syntax, type, semantic, reference]
+              message:
+                type: string
+              line:
+                type: integer
+              column:
+                type: integer
+              severity:
+                type: string
+                enum: [error, warning, info]
+        warnings:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+              message:
+                type: string
+        suggestions:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+              message:
+                type: string
+              fix:
+                type: string
+
+# Generation Examples
+x-generation-examples:
+  simple_extraction:
+    request:
+      requirements: "Extract invoice data including line items"
+      target_language: "python"
+    response:
+      pattern_used: "extraction"
+      quality_score: 98
+
+  complex_rag:
+    request:
+      requirements: "Build a citation-aware search system"
+      target_language: "typescript"
+      framework: "nextjs"
+    response:
+      pattern_used: "rag"
+      quality_score: 95
+
+  multi_agent:
+    request:
+      requirements: "Create planning and execution agents"
+      optimization_level: "aggressive"
+    response:
+      pattern_used: "agents"
+      quality_score: 92
+
+# Performance SLAs
+x-performance-sla:
+  response_times:
+    simple_function: 5000  # 5 seconds
+    complex_system: 20000  # 20 seconds
+    full_project: 30000    # 30 seconds
+
+  success_rates:
+    first_compilation: 0.95  # 95%
+    test_passage: 0.90       # 90%
+    deployment_ready: 0.85   # 85%
+
+  quality_thresholds:
+    minimum_score: 80
+    token_efficiency: 0.5    # 50% reduction
+    test_coverage: 1.0       # 100%
