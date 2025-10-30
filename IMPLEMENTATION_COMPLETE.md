@@ -477,6 +477,44 @@ Token reduction strategies:
 
 ## Version History
 
+### v1.2.0 - Two-Phase MCP Validation (2025-01-30)
+
+**Critical Enhancement**: Two-MCP validation strategy (baml_Examples → baml_Docs)
+
+**User Requirement**: "We have two MCPs - one for examples and one for the actual code base. Examples might be outdated. Use the other MCP to validate and correct errors."
+
+**Changes**:
+- ✅ **Step [2.5]**: Syntax Validation using baml_Docs (NEW workflow step)
+- ✅ **Step [6.5]**: Error Recovery with auto-fix (NEW workflow step, max 2 retries)
+- ✅ **Pattern Recognition**: Added VALIDATE directive to verify syntax is current
+- ✅ **Observable Indicators**: 7 total (added 3 new: validation, modernization, error fix)
+- ✅ **Error Handling**: Active auto-fix instead of passive suggestions
+- ✅ **Token Budget**: 1310 words (~3742 tokens, 93.5% of 4000 budget)
+
+**Two-MCP Architecture**:
+1. **baml_Examples** (BoundaryML/baml-examples): Pattern discovery, rich use cases
+2. **baml_Docs** (BoundaryML/baml): Syntax validation, canonical specification, error recovery
+
+**Impact**:
+- Examples validated against canonical BoundaryML/baml before generation
+- Auto-modernization of deprecated patterns from examples
+- Self-healing error recovery using official docs
+- Observable transparency (users see validation/modernization/fixes)
+- Fulfills requirement: "Use other MCP to validate and correct errors"
+
+**Testing**: All 4 comprehensive test cases passed
+- ✅ Test 1: Contact extraction (114 patterns found, syntax validated)
+- ✅ Test 2: Sentiment classification (23 patterns found, enum syntax validated)
+- ✅ Test 3: RAG with citations (2 patterns found, complex nested types validated)
+- ✅ Test 4: Multimodal image extraction (19 patterns found, vision model validated)
+
+**Files**:
+- `baml-codegen/SKILL.md` (+56 lines, core two-phase validation)
+- `V1.2.0_RELEASE_NOTES.md` (new, 15k+ words comprehensive docs)
+- `V1.2.0_TEST_RESULTS.md` (new, all 4 test cases documented)
+
+**Commits**: `73da672` (implementation), `02a3742` (release notes)
+
 ### v1.1.0 - MCP Enforcement (2025-01-30)
 
 **Critical Update**: Enforced real-time MCP queries during code generation
@@ -525,9 +563,10 @@ Successfully delivered a production-ready BAML Code Generation Skill that:
 
 ## Conclusion
 
-The BAML Code Generation Skill is **production-ready** and fulfills its core promise: **"stay up-to-date with a changing codebase"** through enforced, observable MCP queries.
+The BAML Code Generation Skill is **production-ready** and fulfills its enhanced promise: **"stay up-to-date with a changing codebase through two-phase MCP validation with automatic error recovery."**
 
-**Current Version**: v1.1.0
+**Current Version**: v1.2.0 (Two-Phase MCP Validation)
 **Status**: 🎉 **PRODUCTION READY** 🎉
-**Ready For**: Pull Request, User Testing, Production Deployment
+**Testing**: ✅ All 4 comprehensive test cases passed
+**Ready For**: Pull Request to Main, User Testing, Production Deployment
 **Blockers**: None
