@@ -11,8 +11,9 @@ Monitors official BAML repositories for changes and updates pattern cache automa
 
 ```
 FUNCTION schedule_monitoring():
-  # Daily update at 00:00 UTC
-  schedule.daily(time="00:00", func=check_and_update_patterns)
+  # Daily update at 00:00 UTC (timezone-neutral for global skill usage)
+  # Pattern updates are repository-driven, not user-specific
+  schedule.daily(time="00:00", timezone="UTC", func=check_and_update_patterns)
 
 FUNCTION check_and_update_patterns():
   log(INFO, "Starting daily repository check...")

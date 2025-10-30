@@ -16,7 +16,7 @@ The Pattern Library is the central data structure for storing, organizing, and r
   "version": "1.0.0",
   "last_updated": "ISO-8601 timestamp",
   "repository_commit": "git commit hash",
-  "total_patterns": 1000,
+  "total_patterns": "<number>",  // calculated dynamically from all patterns
   "patterns": {
     "extraction": [PatternCategory],
     "classification": [PatternCategory],

@@ -509,12 +509,14 @@ cache_manager.set(requirement_hash, code, tier=2, ttl=900)
 - Tier 3: <50ms (file read + parse)
 - Tier 4: <500ms (MCP query)
 
-### Hit Rate Goals
-- Tier 1: 60%
-- Tier 2: 25%
-- Tier 3: 10%
-- Tier 4: 5%
-- **Overall**: 95% cached (only 5% need MCP)
+### Hit Rate Goals (Projected Targets)
+- Tier 1: 60% (projected)
+- Tier 2: 25% (projected)
+- Tier 3: 10% (projected)
+- Tier 4: 5% (projected)
+- **Overall**: 95% cached (target, pending production validation)
+
+*Note: These are performance targets based on analysis of common BAML patterns. Actual hit rates will be measured and reported post-deployment.*
 
 ### Storage Limits
 - Tier 2: Max 2MB in memory

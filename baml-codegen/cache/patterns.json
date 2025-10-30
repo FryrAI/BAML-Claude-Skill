@@ -1,4 +1,5 @@
 {
+  "_comment": "Initial cache state. Timestamps and patterns will be updated automatically on first MCP query.",
   "version": "1.0.0",
   "last_updated": "2025-01-25T00:00:00Z",
   "repository_commit": null,
