@@ -1,0 +1,308 @@
+# MCP Query Interface Specification
+# Version: 1.0.0
+# Description: Defines all MCP server query patterns for BAML Code Generation Skill
+
+openapi: 3.0.0
+info:
+  title: BAML MCP Query Interface
+  version: 1.0.0
+  description: Interface for querying BAML repositories via MCP servers
+
+servers:
+  - url: mcp://baml_Docs
+    description: Core BAML repository (BoundaryML/baml)
+  - url: mcp://baml_Examples
+    description: Example patterns repository (BoundaryML/baml-examples)
+
+paths:
+  /fetch_documentation:
+    post:
+      summary: Fetch complete BAML documentation
+      operationId: fetchBAMLDocumentation
+      tags:
+        - Documentation
+      responses:
+        '200':
+          description: Complete documentation retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentationResponse'
+        '404':
+          description: Documentation not found
+        '500':
+          description: MCP server error
+
+  /search_documentation:
+    post:
+      summary: Semantic search within BAML documentation
+      operationId: searchBAMLDocumentation
+      tags:
+        - Documentation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - query
+              properties:
+                query:
+                  type: string
+                  description: Semantic search query
+                  example: "class definition syntax"
+      responses:
+        '200':
+          description: Search results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResults'
+
+  /search_code:
+    post:
+      summary: Search BAML code in repository
+      operationId: searchBAMLCode
+      tags:
+        - Code
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - query
+              properties:
+                query:
+                  type: string
+                  description: Code search query
+                  example: "function ExtractInvoice"
+                page:
+                  type: integer
+                  description: Page number (30 results per page)
+                  default: 1
+      responses:
+        '200':
+          description: Code search results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CodeSearchResults'
+
+  /fetch_url_content:
+    post:
+      summary: Fetch specific file content from repository
+      operationId: fetchGenericURLContent
+      tags:
+        - Content
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - url
+              properties:
+                url:
+                  type: string
+                  format: uri
+                  description: Absolute URL to fetch
+                  example: "https://raw.githubusercontent.com/BoundaryML/baml/main/README.md"
+      responses:
+        '200':
+          description: Content retrieved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContentResponse'
+
+components:
+  schemas:
+    DocumentationResponse:
+      type: object
+      properties:
+        content:
+          type: string
+          description: Full documentation content
+        metadata:
+          type: object
+          properties:
+            version:
+              type: string
+            last_updated:
+              type: string
+              format: date-time
+            token_count:
+              type: integer
+
+    SearchResults:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              title:
+                type: string
+              content:
+                type: string
+              relevance_score:
+                type: number
+              source_path:
+                type: string
+        total_results:
+          type: integer
+        query_tokens:
+          type: integer
+
+    CodeSearchResults:
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            type: object
+            properties:
+              path:
+                type: string
+                description: File path in repository
+              repository:
+                type: string
+              score:
+                type: number
+              highlights:
+                type: array
+                items:
+                  type: string
+        total_count:
+          type: integer
+        incomplete_results:
+          type: boolean
+        page:
+          type: integer
+
+    ContentResponse:
+      type: object
+      properties:
+        content:
+          type: string
+          description: File content
+        metadata:
+          type: object
+          properties:
+            url:
+              type: string
+            content_type:
+              type: string
+            size:
+              type: integer
+            encoding:
+              type: string
+
+    # Query Patterns for different use cases
+    QueryPatterns:
+      type: object
+      description: Predefined query patterns for common operations
+      properties:
+        syntax_queries:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                example: "type_definitions"
+              pattern:
+                type: string
+                example: "class enum union type @description"
+              expected_results:
+                type: array
+                items:
+                  type: string
+
+        pattern_queries:
+          type: array
+          items:
+            type: object
+            properties:
+              category:
+                type: string
+                enum: [extraction, classification, rag, agents]
+              search_terms:
+                type: array
+                items:
+                  type: string
+              file_patterns:
+                type: array
+                items:
+                  type: string
+                  example: "**/extract*/**/*.baml"
+
+        validation_queries:
+          type: array
+          items:
+            type: object
+            properties:
+              validator_type:
+                type: string
+                enum: [syntax, types, semantics]
+              query_path:
+                type: string
+                example: "engine/language/lib/baml-core/src/validate/"
+
+# Query Examples and Best Practices
+x-query-examples:
+  extraction_pattern:
+    description: Find extraction examples
+    query: |
+      {
+        "server": "baml_Examples",
+        "operation": "search_code",
+        "params": {
+          "query": "function Extract",
+          "page": 1
+        }
+      }
+
+  syntax_rules:
+    description: Get syntax definitions
+    query: |
+      {
+        "server": "baml_Docs",
+        "operation": "search_documentation",
+        "params": {
+          "query": "grammar syntax rules BAML"
+        }
+      }
+
+  client_configs:
+    description: Find client configurations
+    query: |
+      {
+        "server": "baml_Examples",
+        "operation": "search_code",
+        "params": {
+          "query": "client provider temperature"
+        }
+      }
+
+# Performance Guidelines
+x-performance:
+  caching:
+    - Always cache syntax rules (TTL: 7 days)
+    - Cache pattern queries (TTL: 1 hour)
+    - Never cache validation results
+
+  batching:
+    - Batch related queries together
+    - Max 5 queries per batch
+    - Use pagination for large result sets
+
+  optimization:
+    - Prefer search over fetch when possible
+    - Use specific file paths when known
+    - Limit result size with focused queries
