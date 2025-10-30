@@ -5,9 +5,9 @@ description: "Generates production-ready BAML applications from natural language
 
 # BAML Code Generation Skill
 
-**Version**: 1.1.0
-**Status**: Production (MCP-Enforced)
-**Token Budget**: ~3900 tokens (validated)
+**Version**: 1.2.0
+**Status**: Production (Two-Phase MCP Validation)
+**Token Budget**: ~3800 tokens (validated)
 
 ## Overview
 
@@ -49,6 +49,7 @@ STEPS:
    - mcp__baml_Examples__search_baml_examples_code("{category} extension:baml")
    - Fetch top 2-3 results via mcp__baml_Docs__fetch_generic_url_content
    - Parse types, functions, prompts from real examples
+   - VALIDATE: Query baml_Docs to verify syntax is current (not deprecated)
    - Output: "🔍 Found {X} patterns from BoundaryML/baml-examples"
    - Fall back to cache only if MCP unavailable
 ```
@@ -167,6 +168,12 @@ User Request
     - Select top 3 candidates
     - Output: "🔍 Found {X} patterns from BoundaryML/baml-examples"
     ↓
+[2.5] Syntax Validation **🔍 baml_Docs**
+    - Query: mcp__baml_Docs__search_baml_documentation("syntax {feature}")
+    - Compare: Example syntax vs canonical docs from BoundaryML/baml
+    - Modernize: Update deprecated patterns to current spec
+    - Output: "✅ Validated against BoundaryML/baml" OR "🔧 Modernized {N} patterns"
+    ↓
 [3] Code Generation
     - Generate types (classes, enums)
     - Generate function (signature, prompt, client)
@@ -187,6 +194,14 @@ User Request
     - Optimize for tokens
     - Estimate costs
     ↓
+[6.5] Error Recovery **🔧 IF ERRORS**
+    - Extract: Parse error message from validation
+    - Query: mcp__baml_Docs__search_baml_documentation("{error}")
+    - Fetch: Current syntax spec from BoundaryML/baml
+    - Fix: Update code to match canonical specification
+    - Retry: Re-validate (max 2 attempts)
+    - Output: "🔧 Fixed {N} errors using BoundaryML/baml docs"
+    ↓
 [7] Deliver Artifacts
     - BAML code
     - Test suite
@@ -202,6 +217,9 @@ User Request
 **Observable Indicators** (show user MCP usage):
 - 🔍 "Found {X} patterns from BoundaryML/baml-examples"
 - ✅ "Fetched {file} from BoundaryML/baml"
+- ✅ "Validated against BoundaryML/baml - syntax current"
+- 🔧 "Modernized {N} deprecated patterns from example"
+- 🔧 "Fixed {N} errors using BoundaryML/baml docs"
 - 📦 "Using cached pattern (MCP unavailable)"
 - ⚠️ "MCP unavailable, using fallback templates"
 
@@ -241,9 +259,11 @@ Tier 4 (MCP): Live queries (no cache, always fresh)
 - Suggest similar patterns
 
 **Validation Failure**:
-- Provide detailed error message
-- Suggest corrections
-- Offer to regenerate
+- Auto-query: mcp__baml_Docs__search_baml_documentation("{error}")
+- Compare: Generated code vs canonical BoundaryML/baml syntax
+- Auto-fix: Update code to match current specification
+- Retry: Re-validate with modernized code (max 2 attempts)
+- Report: "🔧 Fixed {N} issues" or detailed error if unfixable
 
 **Generation Timeout**:
 - Show progress indicator
@@ -308,7 +328,7 @@ Output: Task/Plan types, PlanExecution function, state management
 
 ---
 
-**Token Count**: ~3900 tokens (validated)
+**Token Count**: ~3800 tokens (validated)
 **Last Updated**: 2025-01-30
-**Version**: 1.1.0 - MCP enforcement with observable indicators
+**Version**: 1.2.0 - Two-phase MCP validation (baml_Examples → baml_Docs)
 **Ready for Production**: Yes
